@@ -1,0 +1,21 @@
+# general
+README
+LISCENSE
+gis help
+
+# file
+gis commit|c (gis add + git commit)
+gis reset|r (rm when untracked, checkout when is tracked)
+gis unstage|u (git reset)
+
+# branch
+gis branchd|bd (git branch -D local & remote)
+gis branchld|bld (git branch -D local)
+gis branchrd|brd (git branch -D remote)
+gis branchc|bc (git checkout local & remote)
+gis branchlc|blc (git checkout local)
+gis branchrc|brc (git checkout remote)
+
+# stash
+gis stashd|sd (git stash drop)
+gis stasha|sa (git stash apply)
