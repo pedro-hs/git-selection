@@ -8,7 +8,7 @@
 #===============================================================================
 
 install() {
-  local files=("checkbox.bash" "gis.bash" "files.bash")
+  local files=("checkbox.bash" "gis.bash" "files.bash" "uninstall.bash")
 
   rm -rf ~/.gis
   mkdir ~/.gis
