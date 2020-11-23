@@ -20,9 +20,9 @@ uninstall() {
   remove_tmp_files
 
   rm -rf ~/.gis
-  sed -i '/gis.bash/d' ~/.bashrc
+  sed -i "/gis.bash/d" ~/.bashrc
 
-  echo 'Done! Close this terminal and open a new one'
+  echo "Done! Close this terminal and open a new one"
 }
 
 uninstall

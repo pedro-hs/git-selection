@@ -4,7 +4,7 @@ LISCENSE
 gis help
 
 # file
-gis commit|c (gis add + git commit)
+gis commit|cm (gis add + git commit)
 gis rm (rm when untracked, git checkout when is tracked)
 
 # branch

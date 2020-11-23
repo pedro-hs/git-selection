@@ -25,15 +25,15 @@ handle_status() {
   local item="$1"
 
   case $command_name in
-    'add')
-      [[ ${item:1:1} != ' ' ]];;
-    'reset')
-      [[ ${item:0:1} != ' ' && ${item:0:1} != '?' ]];;
+    add)
+      [[ ${item:1:1} != " " ]];;
+    reset)
+      [[ ${item:0:1} != " " && ${item:0:1} != "?" ]];;
   esac
 }
 
 get_selected_items() {
-  IFS='|' read -r -a items <<< "$1"
+  IFS="|" read -r -a items <<< "$1"
   local selected_items
 
   for index in ${selected[@]}; do
@@ -49,7 +49,7 @@ git_command() {
   [[ ! ${valid_commands[*]} == *"$command_name"* ]] && echo "Invalid command_name" && return
 
   local items=("$( get_items $command_name )")
-  [[ $items == '' ]] && echo "No more files to $command_name" && return
+  [[ $items == "" ]] && echo "No more files to $command_name" && return
 
   local output_id="$2"
   local input_path="/tmp/$output_id" && rm -f $input_path
@@ -58,8 +58,8 @@ git_command() {
   while source $checkbox_sh --message="git $command_name" --options="$items" --multiple --index --output="$output_id"; do
     if [[ -e $input_path ]]; then
       selected=$( cat $input_path )
-      [[ $selected == 'Exit' ]] && echo "git $command_name canceled" && return
-      [[ $selected == 'None selected' ]] && echo "Select files to $command_name" && return
+      [[ $selected == "Exit" ]] && echo "git $command_name canceled" && return
+      [[ $selected == "None selected" ]] && echo "Select files to $command_name" && return
       rm -f $input_path
       break
     fi

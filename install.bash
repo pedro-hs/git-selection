@@ -18,12 +18,12 @@ install() {
     chmod 755 "$( dirname "$BASH_SOURCE" )/$item"
   done
 
-  sed -i '/gis.bash/d' ~/.bashrc
-  echo 'alias gs="source ~/.gis/gis.bash"' >> ~/.bashrc
-  echo 'alias gis="source ~/.gis/gis.bash"' >> ~/.bashrc
+  sed -i "/gis.bash/d" ~/.bashrc
+  echo "alias gs="source ~/.gis/gis.bash"" >> ~/.bashrc
+  echo "alias gis="source ~/.gis/gis.bash"" >> ~/.bashrc
   source ~/.bashrc
 
-  echo 'Done! Close this terminal and open a new one'
+  echo "Done! Close this terminal and open a new one"
 }
 
 install "$@"
