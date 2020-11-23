@@ -5,8 +5,7 @@ gis help
 
 # file
 gis commit|c (gis add + git commit)
-gis reset|r (rm when untracked, checkout when is tracked)
-gis unstage|u (git reset)
+gis rm (rm when untracked, git checkout when is tracked)
 
 # branch
 gis branchd|bd (git branch -D local & remote)
