@@ -19,8 +19,8 @@ install() {
   done
 
   sed -i "/gis.bash/d" ~/.bashrc
-  echo "alias gs="source ~/.gis/gis.bash"" >> ~/.bashrc
-  echo "alias gis="source ~/.gis/gis.bash"" >> ~/.bashrc
+  echo "alias gs='source ~/.gis/gis.bash'" >> ~/.bashrc
+  echo "alias gis='source ~/.gis/gis.bash'" >> ~/.bashrc
   source ~/.bashrc
 
   echo "Done! Close this terminal and open a new one"
