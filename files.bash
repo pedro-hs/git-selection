@@ -52,7 +52,7 @@ get_selected_items() {
   echo "$selected_items"
 }
 
-gis_rm() {
+gs_rm() {
   local items="$1"
   IFS="|" read -r -a items <<< "$1"
   local selected="$2"
@@ -87,10 +87,10 @@ run() {
   local input_path="/tmp/$output_id" && rm -f $input_path
   local checkbox_sh="$( dirname "$BASH_SOURCE" )/checkbox.bash"
 
-  while source $checkbox_sh --message="gis $command_name" --options="$items" --multiple --index --output="$output_id"; do
+  while source $checkbox_sh --message="gs $command_name" --options="$items" --multiple --index --output="$output_id"; do
     if [[ -e $input_path ]]; then
       selected=$( cat $input_path )
-      [[ $selected == "Exit" ]] && echo "gis $command_name canceled" && return
+      [[ $selected == "Exit" ]] && echo "gs $command_name canceled" && return
       [[ $selected == "None selected" ]] && echo "Select files to $command_name" && return
       rm -f $input_path
       break
@@ -101,7 +101,7 @@ run() {
 
 
   if [[ $command_name == "rm" ]]; then
-    gis_rm "$items" "$selected"
+    gs_rm "$items" "$selected"
 
   else
     local selected_items=$( get_selected_items "$items" "$selected" )

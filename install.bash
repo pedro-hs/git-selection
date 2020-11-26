@@ -4,22 +4,22 @@
 #  install.bash
 #
 #DESCRIPTION
-#  Install gis
+#  Install gs
 #===============================================================================
 
 install() {
-  local files=("checkbox.bash" "gis.bash" "files.bash" "uninstall.bash")
+  local files=("checkbox.bash" "gs.bash" "files.bash" "uninstall.bash")
 
-  rm -rf ~/.gis
-  mkdir ~/.gis
-  cp -t ~/.gis "${files[@]}"
+  rm -rf ~/.gs
+  mkdir ~/.gs
+  cp -t ~/.gs "${files[@]}"
 
   for item in ${files[@]}; do
     chmod 755 "$( dirname "$BASH_SOURCE" )/$item"
   done
 
-  sed -i "/gis.bash/d" ~/.bashrc
-  echo "alias gs='source ~/.gis/gis.bash'" >> ~/.bashrc
+  sed -i "/gs.bash/d" ~/.bashrc
+  echo "alias gs='source ~/.gs/gs.bash'" >> ~/.bashrc
   source ~/.bashrc
 
   echo "Done! Close this terminal and open a new one"

@@ -1,19 +1,19 @@
 # general
 README
 LISCENSE
-gis help
+gs help
 
 # file
-gis commit|cm (gis add + git commit)
+gs commit|cm (gs add + git commit)
 
 # branch
-gis branchd|bd (git branch -D local & remote)
-gis branchld|bld (git branch -D local)
-gis branchrd|brd (git branch -D remote)
-gis branchc|bc (git checkout local & remote)
-gis branchlc|blc (git checkout local)
-gis branchrc|brc (git checkout remote)
+gs branchd|bd (git branch -D local & remote)
+gs branchld|bld (git branch -D local)
+gs branchrd|brd (git branch -D remote)
+gs branchc|bc (git checkout local & remote)
+gs branchlc|blc (git checkout local)
+gs branchrc|brc (git checkout remote)
 
 # stash
-gis stashd|sd (git stash drop)
-gis stasha|sa (git stash apply)
+gs stashd|sd (git stash drop)
+gs stasha|sa (git stash apply)

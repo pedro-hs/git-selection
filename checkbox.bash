@@ -5,7 +5,7 @@
 #
 #DESCRIPTION
 #  Creates interactive checkboxes (menu) for the terminal
-#  This is a modified version of <https://github.com/pedro-hs/checkbox.sh> for gis
+#  This is a modified version of <https://github.com/pedro-hs/checkbox.sh> for gs
 #  Features:
 #    - Select only a option or multiple options
 #    - Select or unselect multiple options easily
