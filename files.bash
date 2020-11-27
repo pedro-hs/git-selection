@@ -6,9 +6,8 @@
 #DESCRIPTION
 #  Handle files in checkbox
 #===============================================================================
-command_name=""
+command=""
 selected=""
-items=()
 
 get_items() {
   local git_status="$( git status -su )"
@@ -26,7 +25,7 @@ get_items() {
 handle_status() {
   local item="$1"
 
-  case $command_name in
+  case $command in
     add)
       [[ ${item:1:1} != " " ]];;
     reset)
@@ -76,22 +75,22 @@ gs_rm() {
 }
 
 run() {
-  command_name="$1"
+  command="$1"
   local valid_commands=("add" "reset" "rm" "diff")
-  [[ ! ${valid_commands[*]} == *"$command_name"* ]] && echo "Invalid command_name" && return
+  [[ ! ${valid_commands[*]} == *"$command"* ]] && echo "Invalid command" && return
 
-  local items=("$( get_items $command_name )")
-  [[ $items == "" ]] && echo "No more files to $command_name" && return
+  local items=("$( get_items )")
+  [[ $items == "" ]] && echo "No more files to $command" && return
 
   local output_id="$2"
   local input_path="/tmp/$output_id" && rm -f $input_path
-  local checkbox_sh="$( dirname "$BASH_SOURCE" )/checkbox.bash"
+  local checkbox_sh="$( dirname $BASH_SOURCE )/checkbox.bash"
 
-  while source $checkbox_sh --message="gs $command_name" --options="$items" --multiple --index --output="$output_id"; do
+  while source $checkbox_sh --message="gs $command" --options="$items" --multiple --index --output="$output_id"; do
     if [[ -e $input_path ]]; then
-      selected=$( cat $input_path )
-      [[ $selected == "Exit" ]] && echo "gs $command_name canceled" && return
-      [[ $selected == "None selected" ]] && echo "Select files to $command_name" && return
+      selected="$( cat $input_path )"
+      [[ $selected == "Exit" ]] && echo "gs $command canceled" && return
+      [[ $selected == "None selected" ]] && echo "Select files to $command" && return
       rm -f $input_path
       break
     fi
@@ -100,12 +99,12 @@ run() {
   done
 
 
-  if [[ $command_name == "rm" ]]; then
+  if [[ $command == "rm" ]]; then
     gs_rm "$items" "$selected"
 
   else
     local selected_items=$( get_selected_items "$items" "$selected" )
-    git $command_name $selected_items
+    git $command $selected_items
   fi
 
   git status -su

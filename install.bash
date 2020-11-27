@@ -8,7 +8,7 @@
 #===============================================================================
 
 install() {
-  local files=("checkbox.bash" "gs.bash" "files.bash" "uninstall.bash")
+  local files=("checkbox.bash" "gs.bash" "files.bash" "branches.bash" "uninstall.bash")
 
   rm -rf ~/.gs
   mkdir ~/.gs

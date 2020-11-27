@@ -15,3 +15,6 @@ gs branch del|bd (git branch -d local branch)
 # stash
 gs stash drop|sd (git stash drop)
 gs stash apply|sa (git stash apply)
+
+# fix
+copy command on checkbox
