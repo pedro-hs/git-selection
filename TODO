@@ -7,13 +7,11 @@ gs help
 gs commit|cm (gs add + git commit)
 
 # branch
-gs branchd|bd (git branch -D local & remote)
-gs branchld|bld (git branch -D local)
-gs branchrd|brd (git branch -D remote)
-gs branchc|bc (git checkout local & remote)
-gs branchlc|blc (git checkout local)
-gs branchrc|brc (git checkout remote)
+gs branch|b (git switch local branch)
+gs branch -a|ba (git switch remote or local branch)
+gs branch -r|br (git switch remote branch)
+gs branch del|bd (git branch -d local branch)
 
 # stash
-gs stashd|sd (git stash drop)
-gs stasha|sa (git stash apply)
+gs stash drop|sd (git stash drop)
+gs stash apply|sa (git stash apply)
