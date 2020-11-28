@@ -7,7 +7,6 @@
 #  Handle files in checkbox
 #===============================================================================
 command=""
-selected=""
 
 get_items() {
   local git_status="$( git status -su )"
@@ -32,7 +31,7 @@ handle_status() {
       [[ ${item:0:1} != " " && ${item:0:1} != "?" ]];;
     diff)
       [[ ${item:0:2} != "??" ]];;
-    rm|diff)
+    rm)
       [[ 1 -eq 1 ]];;
   esac
 }
@@ -74,30 +73,9 @@ gs_rm() {
   [[ -n ${tracked[*]} ]] && git checkout ${tracked[*]}
 }
 
-run() {
-  command="$1"
-  local valid_commands=("add" "reset" "rm" "diff")
-  [[ ! ${valid_commands[*]} == *"$command"* ]] && echo "Invalid command" && return
-
-  local items=("$( get_items )")
-  [[ $items == "" ]] && echo "No more files to $command" && return
-
-  local output_id="$2"
-  local input_path="/tmp/$output_id" && rm -f $input_path
-  local checkbox_sh="$( dirname $BASH_SOURCE )/checkbox.bash"
-
-  while source $checkbox_sh --message="gs $command" --options="$items" --multiple --index --output="$output_id"; do
-    if [[ -e $input_path ]]; then
-      selected="$( cat $input_path )"
-      [[ $selected == "Exit" ]] && echo "gs $command canceled" && return
-      [[ $selected == "None selected" ]] && echo "Select files to $command" && return
-      rm -f $input_path
-      break
-    fi
-
-    sleep 1
-  done
-
+execute_git() {
+  local items="$1"
+  local selected="$2"
 
   if [[ $command == "rm" ]]; then
     gs_rm "$items" "$selected"
@@ -108,6 +86,36 @@ run() {
   fi
 
   git status -su
+}
+
+run() {
+  command="$1"
+
+  local items=("$( get_items )")
+  [[ $items == "" ]] && echo "No more files to $command" && return
+
+  local selected
+  local output_id="$2"
+  local output="/tmp/$output_id" && rm -f $output
+  local checkbox_sh="$( dirname $BASH_SOURCE )/checkbox.bash"
+
+  while source $checkbox_sh --message="gs $command" --options="$items" --multiple --index --output="$output_id"; do
+    if [[ -e $output ]]; then
+      selected="$( cat $output )"
+      rm -f $output
+
+      case $selected in
+        "Exit") echo "gs $command canceled" && return;;
+        "None selected") echo "Select files to $command" && return;;
+      esac
+
+      break
+    fi
+
+    sleep 1
+  done
+
+  execute_git "$items" "$selected"
 }
 
 run "$@"

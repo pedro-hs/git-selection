@@ -6,15 +6,11 @@ gs help
 # file
 gs commit|cm (gs add + git commit)
 
-# branch
-gs branch|b (git switch local branch)
-gs branch -a|ba (git switch remote or local branch)
-gs branch -r|br (git switch remote branch)
-gs branch del|bd (git branch -d local branch)
-
 # stash
 gs stash drop|sd (git stash drop)
 gs stash apply|sa (git stash apply)
 
 # fix
 copy command on checkbox
+gs branch -a (How to checkout remote branch)
+gs branch -r (How to checkout remote branch)
