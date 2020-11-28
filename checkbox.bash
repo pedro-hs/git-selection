@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 #===============================================================================
 #NAME
-#  checkbox.sh (mod)
+#  checkbox.sh (mod for gs)
 #
 #DESCRIPTION
 #  Creates interactive checkboxes (menu) for the terminal
-#  This is a modified version of <https://github.com/pedro-hs/checkbox.sh> for gs
+#  For more info look the README.md on <https://github.com/pedro-hs/checkbox.sh>
 #  Features:
 #    - Select only a option or multiple options
 #    - Select or unselect multiple options easily
@@ -101,23 +101,14 @@ help_page_keys() {
     local output="(press q to quit)\n"
     output+="# Keybinds
 
-    \t[ENTER]         or o: Close and return selected options
-    \t[SPACE]         or x: Select current option
-    \t[ESC]           or q: Exit
-    \t[UP ARROW]      or k: Move cursor to option above
-    \t[DOWN ARROW]    or j: Move cursor to option below
-    \t[HOME]          or g: Move cursor to first option
-    \t[END]           or G: Move cursor to last option
-    \t[PAGE UP]       or u: Move cursor 5 options above
-    \t[PAGE DOWN]     or d: Move cursor 5 options below
-    \tc               or y: Copy current option
-    \tr                   : Refresh renderization
-    \th                   : Help page"
+    \t[ENTER]         or o: Close and return selected options\n\t[SPACE]         or x: Select current option
+    \t[ESC]           or q: Exit\n\t[UP ARROW]      or k: Move cursor to option above\n\t[DOWN ARROW]    or j: Move cursor to option below
+    \t[HOME]          or g: Move cursor to first option\n\t[END]           or G: Move cursor to last option
+    \t[PAGE UP]       or u: Move cursor 5 options above\n\t[PAGE DOWN]     or d: Move cursor 5 options below
+    \tc               or y: Copy current option\n\tr                   : Refresh renderization\n\th                   : Help page"
 
     if $has_multiple_options; then
-        output+="
-        A                   : Unselect all options
-        a                   : Select all options
+        output+="\n\tA                   : Unselect all options\n\ta                   : Select all options
         [INSERT]        or v: On/Off select options during navigation (select mode)
         [BACKSPACE]     or V: On/Off unselect options during navigation (unselect mode)"
     fi
@@ -185,22 +176,21 @@ select_many_options() {
 }
 
 set_options() {
-    if ! [[ $options_input == '' ]]; then
+    if ! [[ $options_input == "" ]]; then
         options=()
 
         local temp_options=$( echo "${options_input#*=}" | sed 's/\\a//g;s/\\b//g;s/\\c//g;s/\\e//g;s/\\f//g;s/\\n//g;s/\\r//g;s/\\t//g;s/\\v//g' )
         temp_options=$( echo "$temp_options" | tr '\n' '|' )
         temp_options=$( echo "$temp_options" | sed 's/||/|/g' )
-        IFS='|' read -a temp_options <<< "$temp_options"
+        IFS="|" read -a temp_options <<< "$temp_options"
 
         for index in ${!temp_options[@]}; do
             local option=${temp_options[index]}
 
-            if [[ ${option::1} == '+' ]]; then
+            if [[ ${option::1} == "+" ]]; then
                 if $has_multiple_options || [[ -z $selected_options ]]; then
                     selected_options+=("$index")
                 fi
-
                 option=${option:1}
             fi
 
@@ -321,7 +311,6 @@ up() {
         && end_page=$(( $start_page + $terminal_width - $INTERFACE_SIZE ))
 
     select_many_options
-
 }
 
 down() {
@@ -351,12 +340,9 @@ end() {
 
 select_option() {
     if [[ ! ${selected_options[*]} == *$cursor* ]]; then
-        if $has_multiple_options; then
-            selected_options+=("$cursor")
-
-        else
-            selected_options=("$cursor")
-        fi
+        $has_multiple_options \
+            && selected_options+=("$cursor") \
+            || selected_options=("$cursor")
 
     else
         selected_options=($( array_without_value "$cursor" "${selected_options[@]}" ))
@@ -378,12 +364,11 @@ confirm() {
         done
     fi
 
-    [[ -z $output ]] && export_output 'None selected' || export_output "$output"
+    [[ -z $output ]] && export_output "None selected" || export_output "$output"
 }
 
 quit() {
-    clear
-    export_output 'Exit'
+    clear && export_output "Exit"
 }
 
 copy() {
@@ -408,22 +393,20 @@ render() {
     clear
 
     local output="  $message\n"
-    output+="$WHITE"
-    output+="$separator\n"
+    output+="$WHITE$separator\n"
     output+="$content"
-    output+="$WHITE"
-    output+="$separator\n"
+    output+="$WHITE$separator\n"
     output+="  $footer\n"
 
     echo -en "$output"
 }
 
 get_pressed_key() {
-    IFS= read -sN1 key 2>/dev/null >&2
+    IFS= read -sn1 key 2>/dev/null >&2
 
-    read -sN1 -t 0.0001 k1
-    read -sN1 -t 0.0001 k2
-    read -sN1 -t 0.0001 k3
+    read -sn1 -t 0.0001 k1
+    read -sn1 -t 0.0001 k2
+    read -sn1 -t 0.0001 k3
     key+="$k1$k2$k3"
 
     case $key in
@@ -455,7 +438,6 @@ get_opt() {
             --multiple) has_multiple_options=true;;
             --message=*) message="${opt#*=}";;
             --options=*) options_input="$opt";;
-            --output=*) output_id="${opt#*=}";;
             *) help_page_opt;;
         esac
     done
@@ -469,15 +451,11 @@ constructor() {
     start_page=0
     end_page=$(( $start_page + $terminal_width - $INTERFACE_SIZE ))
 
-    local message_length=${#message}
-    local default_length=50
+    [[ ${#message} -gt 40 ]] \
+        && message_length=$(( ${#message} + 10 )) \
+        || message_length=50
 
-    if [[ $message_length -gt $default_length ]]; then
-        separator=$( perl -E "say '-' x $(( $message_length + 10 ))" )
-
-    else
-        separator=$( perl -E "say '-' x $default_length" )
-    fi
+    separator=$( perl -E "say '-' x $message_length" )
 }
 
 #===============================================================================
