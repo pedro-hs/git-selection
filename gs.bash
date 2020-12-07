@@ -16,5 +16,6 @@ case "$@" in
   # "branch -a"|ba) source ~/.gs/branches.bash "branch -a" "a3f223d9-239c-43d7-bc60-2ab6b40fe0b7";;
   # "branch -r"|br) source ~/.gs/branches.bash "branch -r" "fd27537f-e868-472b-b62b-4978733be288";;
   "branch -d"|bd) source ~/.gs/branches.bash "branch -d" "4ee1e390-e999-4858-affe-2f2b4cd79e01";;
+  "branch -D"|bD) source ~/.gs/branches.bash "branch -D" "31a1382b-b1ba-4f03-9fa2-1d7656aae1f3";;
   *) echo -e "Invalid command\nAvailable:\nadd or a\nreset or r\nrm\ndiff or df\nbranch or b\nbranch -a or ba (cooking)\nbranch -r or br (cooking)\nbranch -d or bd";;
 esac

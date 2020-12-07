@@ -9,10 +9,12 @@
 command=""
 
 get_items() {
-  local items
-  [[ $command == "branch -d" ]] \
-    && local git_branch="$( git branch )" \
-    || local git_branch="$( git $command )"
+  local items git_branch
+
+  case $command in
+    "branch -d"|"branch -D") git_branch="$( git branch )";;
+    *) git_branch="$( git $command )";;
+  esac
 
   while IFS= read item; do
     if [[ ${item:0:1} != "*" ]]; then
@@ -40,8 +42,10 @@ execute_git() {
   local selected_items="$1"
 
   if [[ -n ${selected_items[*]} ]]; then
-    [[ $command == "branch -d" ]] \
-      && git branch -d $selected_items || git switch $selected_items
+    case $command in
+      "branch -d"|"branch -D") git $command $selected_items;;
+      *) git switch $selected_items;;
+    esac
   fi
 
   git branch
@@ -49,13 +53,15 @@ execute_git() {
 
 run() {
   command="$1"
+  local text has_multiple
 
-  [[ $command == "branch -d" ]] && local text="delete" || local text="switch"
+  case $command in
+    "branch -d"|"branch -D") text="delete"; has_multiple="--multiple";;
+    *) text="switch"; has_multiple="";;
+  esac
+
   local items=("$( get_items $command )")
   [[ $items == "" ]] && echo "No more branches to $text" && return
-
-  [[ $command == "branch -d" ]] \
-    && local has_multiple="--multiple" || local has_multiple=""
 
   local selected
   local output_id="$2"

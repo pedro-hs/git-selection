@@ -438,6 +438,7 @@ get_opt() {
             --multiple) has_multiple_options=true;;
             --message=*) message="${opt#*=}";;
             --options=*) options_input="$opt";;
+            --output=*) output_id="${opt#*=}";;
             *) help_page_opt;;
         esac
     done
