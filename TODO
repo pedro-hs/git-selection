@@ -14,3 +14,7 @@ gs stash apply|sa (git stash apply)
 copy command on checkbox
 gs branch -a (How to checkout remote branch)
 gs branch -r (How to checkout remote branch)
+gs rm block unmerged files (git status DU, UU, AA)
+gs rm to staged files
+gs rm and r to renamed files
+gs rm in files with space in the name
