@@ -19,16 +19,19 @@
 #    - Copy current option value to clipboard
 #    - Help tab when press h or wrongly call the script
 #
+#ORIGINAL SOURCE
+#  <https://github.com/pedro-hs/checkbox.sh>
+#
 #===============================================================================
 # CONTANTS
 #===============================================================================
 readonly SELECTED="[x]"
 readonly UNSELECTED="[ ]"
 
-readonly WHITE="\e[2K\e[37m"
-readonly BLUE="\e[2K\e[34m"
-readonly RED="\e[2K\e[31m"
-readonly GREEN="\e[2K\e[32m"
+readonly WHITE="\033[2K\033[37m"
+readonly BLUE="\033[2K\033[34m"
+readonly RED="\033[2K\033[31m"
+readonly GREEN="\033[2K\033[32m"
 
 readonly INTERFACE_SIZE=6
 readonly DEFAULT_OPTIONS=("Option 1" "Option 2" "Option 3" "Option 4" "Option 5" "Option 6" "Option 7" "Option 8" "Option 9" "Option 10" "Option 11" "Option 12" "Option 13" "Option 14" "Option 15" "Option 16" "Option 17" "Option 18" "Option 19" "Option 20" "Option 21" "Option 22" "Option 23" "Option 24" "Option 25" "Option 26" "Option 27" "Option 28" "Option 29" "Option 30")
@@ -55,8 +58,8 @@ content=""
 message=""
 separator=""
 options_input=""
-output_id=""
 color=$WHITE
+checkbox_output=""
 
 #===============================================================================
 # UTILS
@@ -91,7 +94,7 @@ help_page_opt() {
     while true; do
         local key=$( get_pressed_key )
         case $key in
-            _esc|q) clear && exit && return;;
+            _esc|q) return;;
         esac
     done
 }
@@ -119,7 +122,7 @@ help_page_keys() {
     while true; do
         local key=$( get_pressed_key )
         case $key in
-            _esc|q) clear && return;;
+            _esc|q) return;;
         esac
     done
 }
@@ -179,9 +182,9 @@ set_options() {
     if ! [[ $options_input == "" ]]; then
         options=()
 
-        local temp_options=$( echo "${options_input#*=}" | sed 's/\\a//g;s/\\b//g;s/\\c//g;s/\\e//g;s/\\f//g;s/\\n//g;s/\\r//g;s/\\t//g;s/\\v//g' )
-        temp_options=$( echo "$temp_options" | tr '\n' '|' )
-        temp_options=$( echo "$temp_options" | sed 's/||/|/g' )
+        local temp_options=$( echo "${options_input#*=}" | sed "s/\\a//g;s/\\b//g;s/\\f//g;s/\\n//g;s/\\r//g;s/\\t//g;s/\\v//g" )
+        temp_options=$( echo "$temp_options" | sed "s/|\+/|/g" )
+        temp_options=$( echo "$temp_options" | tr "\n" "|" )
         IFS="|" read -a temp_options <<< "$temp_options"
 
         for index in ${!temp_options[@]}; do
@@ -219,10 +222,6 @@ get_footer() {
     fi
 
     echo "$footer"
-}
-
-export_output() {
-    echo -e "$1" > "/tmp/$output_id"
 }
 
 #===============================================================================
@@ -351,7 +350,6 @@ select_option() {
 
 confirm() {
     local output
-    clear
 
     if $will_return_index; then
         output="${selected_options[@]}"
@@ -364,16 +362,17 @@ confirm() {
         done
     fi
 
-    [[ -z $output ]] && export_output "None selected" || export_output "$output"
+    clear
+    [[ -z $output ]] && checkbox_output="None selected" || checkbox_output="$output"
 }
 
 quit() {
-    clear && export_output "Exit"
+    clear && checkbox_output="Exit"
 }
 
 copy() {
-    echo "${options[$cursor]}" | xclip -sel clip
-    echo "${options[$cursor]}" | xclip
+    echo "${options[$cursor]:3}" | xclip -sel clip
+    echo "${options[$cursor]:3}" | xclip
     copy_in_message=true
 }
 
@@ -410,19 +409,17 @@ get_pressed_key() {
     key+="$k1$k2$k3"
 
     case $key in
-        $'\x1b') key=_esc;;
-        ' ') key=_space;;
         '') key=_enter;;
-        $'\e') key=_enter;;
-        $'\x0a') key=_enter;;
+        ' ') key=_space;;
+        $'\x1b') key=_esc;;
+        $'\e[F') key=_end;;
+        $'\e[H') key=_home;;
         $'\x7f') key=_backspace;;
         $'\x1b\x5b\x32\x7e') key=_insert;;
+        $'\x1b\x5b\x41') key=_up;;
+        $'\x1b\x5b\x42') key=_down;;
         $'\x1b\x5b\x35\x7e') key=_pgup;;
         $'\x1b\x5b\x36\x7e') key=_pgdown;;
-        $'\e[1~'|$'\e0H'|$'\e[H') key=_home;;
-        $'\e[4~'|$'\e0F'|$'\e[F') key=_end;;
-        $'\e[A'|$'\e0A  '|$'\e[D'|$'\e0D') key=_up;;
-        $'\e[B'|$'\e0B'|$'\e[C'|$'\e0C') key=_down;;
     esac
 
     echo "$key"
@@ -438,7 +435,6 @@ get_opt() {
             --multiple) has_multiple_options=true;;
             --message=*) message="${opt#*=}";;
             --options=*) options_input="$opt";;
-            --output=*) output_id="${opt#*=}";;
             *) help_page_opt;;
         esac
     done
@@ -478,8 +474,8 @@ main() {
             _end|G) end;;
             _pgup|u) page_up;;
             _pgdown|d) page_down;;
-            _esc|q) quit && return;;
-            _enter|o) confirm && return;;
+            _esc|q) quit && break;;
+            _enter|o) confirm && break;;
             _space|x) select_option;;
             _insert|v) toggle_select_mode;;
             _backspace|V) toggle_unselect_mode;;
@@ -492,6 +488,9 @@ main() {
 
         render
     done
+
+    echo "$checkbox_output"
+    return
 }
 
 main "$@"

@@ -63,26 +63,15 @@ run() {
   local items=("$( get_items $command )")
   [[ $items == "" ]] && echo "No more branches to $text" && return
 
-  local selected
-  local output_id="$2"
-  local output="/tmp/$output_id" && rm -f $output
   local checkbox_sh="$( dirname $BASH_SOURCE )/checkbox.bash"
+  source $checkbox_sh --message="gs $command" --options="$items" --index $has_multiple
+  clear
+  local selected="$checkbox_output"
 
-  while source $checkbox_sh --message="gs $command" --options="$items" --index --output="$output_id" $has_multiple; do
-    if [[ -e $output ]]; then
-      selected="$( cat $output )"
-      rm -f $output
-
-      case $selected in
-        "Exit") echo "gs $command canceled" && return;;
-        "None selected") echo "Select branch to $text" && return;;
-      esac
-
-      break
-    fi
-
-    sleep 1
-  done
+  case $selected in
+    "Exit") echo "gs $command canceled" && return;;
+    "None selected") echo "Select branch to $text" && return;;
+  esac
 
   local selected_items=$( get_selected_items "$items" "$selected" )
   execute_git "$selected_items"

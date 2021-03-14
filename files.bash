@@ -94,26 +94,15 @@ run() {
   local items=("$( get_items )")
   [[ $items == "" ]] && echo "No more files to $command" && return
 
-  local selected
-  local output_id="$2"
-  local output="/tmp/$output_id" && rm -f $output
   local checkbox_sh="$( dirname $BASH_SOURCE )/checkbox.bash"
+  source $checkbox_sh --message="gs $command" --options="$items" --multiple --index
+  clear
+  local selected="$checkbox_output"
 
-  while source $checkbox_sh --message="gs $command" --options="$items" --multiple --index --output="$output_id"; do
-    if [[ -e $output ]]; then
-      selected="$( cat $output )"
-      rm -f $output
-
-      case $selected in
-        "Exit") echo "gs $command canceled" && return;;
-        "None selected") echo "Select files to $command" && return;;
-      esac
-
-      break
-    fi
-
-    sleep 1
-  done
+  case $selected in
+    "Exit") echo "gs $command canceled" && return;;
+    "None selected") echo "Select files to $command" && return;;
+  esac
 
   execute_git "$items" "$selected"
 }
