@@ -2,7 +2,7 @@
 
 [![Bash](https://img.shields.io/badge/language-Bash-green.svg)](https://github.com/pedro-hs/checkbox.sh/blob/master/checkbox.sh) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/pedro-hs/terminal-checkbox.sh/master/LICENSE.md)
 
-Utilitary bash application to use git more easily
+Bash utilitary application to use git more easily
 
 Create checkboxes to select with files, branches, stashes and allows you to execute multiple git actions with a single command
 
