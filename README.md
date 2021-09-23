@@ -21,9 +21,16 @@ Create checkboxes to select with files, branches, stashes and allows you to exec
 
 ## Quickstart
 
-- `(In a debian like environment)`
 - To install run `source install.bash`
 - You can run gs with the command `gs [OPTION]`
 - To list avaiable option run `gs`
 - To uninstall run `source uninstall.bash`
 - `gs` are called by bash alias, so if you use another program which is called with command `gs` you can change in your bashrc
+
+<br></br>
+
+### Tested:
+
+```
+Ubuntu
+```
