@@ -32,5 +32,5 @@ Create checkboxes to select with files, branches, stashes and allows you to exec
 ### Tested:
 
 ```
-Ubuntu
+Ubuntu 20.04.2 LTS
 ```
