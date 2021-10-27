@@ -32,7 +32,7 @@ handle_status() {
     diff)
       [[ ${item:0:2} != "??" ]];;
     rm)
-      [[ 1 -eq 1 ]];;
+      [[ ${item:1:1} != " " ]];;
   esac
 }
 
@@ -63,6 +63,9 @@ gs_rm() {
 
     if [[ ${item:0:2} == "??" ]]; then
       untracked+=("${item:3}")
+
+    elif [[ ${item:1:1} == " " && ${item:1:1} != "??" ]]; then
+      a
 
     else
       tracked+=("${item:3}")
