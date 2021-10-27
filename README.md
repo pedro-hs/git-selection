@@ -32,5 +32,7 @@ Create checkboxes to select with files, branches, stashes and allows you to exec
 ### Tested:
 
 ```
-Ubuntu 20.04.2 LTS
+Ubuntu 20.04 LTS
+Ubuntu 20.10
+Fedora 35
 ```
