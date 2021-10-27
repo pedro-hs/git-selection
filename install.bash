@@ -22,7 +22,7 @@ install() {
   echo "alias gs='source ~/.gs/gs.bash'" >> ~/.bashrc
   source ~/.bashrc
 
-  echo "Done! Close this terminal and open a new one"
+  echo "Done! Close this terminal and open a new one. Now you can delete this folder."
 }
 
 install "$@"
