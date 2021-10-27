@@ -4,7 +4,7 @@
 
 Bash utilitary application to use git more easily
 
-Create checkboxes to select with files, branches, stashes and allows you to execute multiple git actions with a single command
+Create checkboxes to select files, branches, stashes and execute a single git actions for all selected
 
 <br></br>
 
