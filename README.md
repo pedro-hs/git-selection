@@ -2,13 +2,13 @@
 
 [![Bash](https://img.shields.io/badge/language-Bash-green.svg)](https://github.com/pedro-hs/checkbox.sh/blob/master/checkbox.sh) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/pedro-hs/terminal-checkbox.sh/master/LICENSE.md)
 
-Bash utilitary application to use git more easily
+Bash utility application to handle git more easily
 
 Create checkboxes to select files, branches, stashes and execute a single git actions for all selected
 
 <br></br>
 
-## Supported Git Features
+## Supported Git Commands
 
 - add
 - reset
@@ -26,6 +26,7 @@ Create checkboxes to select files, branches, stashes and execute a single git ac
 - To list avaiable option run `gs`
 - To uninstall run `source uninstall.bash`
 - `gs` are called by bash alias, so if you use another program which is called with command `gs` you can change in your bashrc
+- See the keybinds at README.MD of https://github.com/pedro-hs/checkbox.sh
 
 <br></br>
 
