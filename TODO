@@ -6,6 +6,7 @@ gs stash drop|sd (git stash drop)
 gs stash apply|sa (git stash apply)
 
 # fix
+copy the branch name with y is cutting the first letter
 gs branch -a (How to checkout remote branch)
 gs branch -r (How to checkout remote branch)
 gs rm block unmerged files (git status DU, UU, AA)
